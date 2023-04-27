@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Lista de User Storys</h1>
+
+    {% if userstory_list %}
+    <ul>
+
+      {% for userstory in userstory_list %}
+      <li>
+        <a href="{{ userstory.get_absolute_url }}">{{ userstory.nombre }}</a> (Proyecto: {{userstory.proyecto}})
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>No hay historias que mostrar.</p>
+    {% endif %}
+
+    <a href="{% url 'create_story' %}">Crear User Story</a>
+
+{% endblock %}

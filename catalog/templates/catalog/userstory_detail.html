@@ -1,0 +1,24 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>{{ object.idUserStory }} - {{ object.nombre }}</h1>
+
+  <p><strong>Descripcion:</strong> {{ object.descripcion }} </p>
+  <p><strong>Proyecto:</strong> {{ object.proyecto }} </p>
+  <p><strong>StoryPoints:</strong> {{ object.storyPoints }} </p>
+  <p><strong>Descripcion de hecho:</strong> {{ object.hecho }} </p>
+  <p><strong>Prioridad:</strong> {{ object.prioridad }} </p>
+  <p><strong>Estado:</strong> {{ object.estado }} </p>
+  <p><strong>Usuario:</strong> {{ object.usuario }} </p>
+  <p><strong>Fecha Inicio:</strong> {{ object.fechaInicio }}</p>
+  <p><strong>Fecha Fin:</strong> {{ object.fechaFin }}</p>
+
+  <br>
+  
+  <p>
+    <a href="{% url 'update_story' userstory.pk %}">Actualizar User Story</a>
+    <br>
+    <a href="{% url 'delete_story' userstory.pk %}">Eliminar UserStory</a>
+  </p>
+
+{% endblock %}

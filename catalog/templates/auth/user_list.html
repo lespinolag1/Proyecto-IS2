@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Lista de usuarios del sistema</h1>
+
+    {% if user_list %}
+    <ul>
+
+      {% for user in user_list %}
+      <li>
+        <a href="{% url 'user_detail' user.pk %}">{{ user.username }}</a> ({{user.email}} - ID: {{user.id}})
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>No hay usuarios que mostrar.</p>
+    {% endif %}
+
+    <a href="{% url 'user_create' %}">Crear Usuario</a>
+
+{% endblock %}

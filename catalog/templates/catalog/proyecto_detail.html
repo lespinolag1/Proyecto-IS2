@@ -1,0 +1,42 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Nombre: {{ object.nombre }}</h1>
+
+  <p><strong>Descripcion:</strong> {{ object.descripcion }} </p>
+  <p><strong>Fecha Inicio:</strong> {{ object.fechaInicio }}</p>
+  <p><strong>Fecha Fin:</strong> {{ object.fechaFin }}</p>
+  <p><strong>Estado:</strong> {{ object.estado }}</p>
+  <h2>Usuarios del proyecto</h2>
+  <ul>
+    {% if usuarios_proyecto %}
+      {% for usuario_proyecto in usuarios_proyecto %}
+        <li>{{ usuario_proyecto.user.username }}: {{usuario_proyecto.rol.rol }}</li> 
+      {% endfor %}
+    {% else %}
+      <p>No hay usuarios que mostrar.</p>
+    {% endif %}
+  </ul>
+  <a href="{% url 'agregar_usuario' proyecto.pk %}">Agregar Miembro</a>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>User Storys</h4>
+
+    {% for tareas in object.userstory_set.all %}
+    <hr>
+    <p class="{% if tareas.estado == 'i' %}text-success{% elif tareas.estado == 'c' %}text-danger{% else %}text-warning{% endif %}">{{ tareas.get_status_display }}</p>
+    {% if tareas.status != 'finalizado' %}<p><strong>La tarea debe ser terminada en :</strong> {{tareas.fechaFin}}</p>{% endif %}
+    <p><strong>Nombre:</strong> {{tareas.nombre}}</p>
+    <p><strong>StoryPoints:</strong> {{tareas.storyPoints}}</p>
+    {% endfor %}
+  </div>
+
+  <br>
+  
+  <p>
+    <a href="{% url 'update_proyecto' proyecto.pk %}">Actualizar Proyecto</a>
+    <br>
+    <a href="{% url 'delete_proyecto' proyecto.pk %}">Eliminar Proyecto</a>
+  </p>
+
+{% endblock %}

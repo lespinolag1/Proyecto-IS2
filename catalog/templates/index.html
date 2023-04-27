@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>GesPoli Home</h1>
+
+  <p>Welcome to <em>GesPoli</em>, a very basic Django website.</p>
+
+<h2>Dynamic content</h2>
+
+  <p>Algunos datos del sistema: </p>
+  <ul>
+    <li><strong>Proyectos:</strong> {{ num_proyectos }}</li>
+    <li><strong>Tareas:</strong> {{ num_storys }}</li>
+    <li><strong>Numero de proyectos iniciados:</strong> {{ num_proyectos_iniciados }}</li>
+  </ul>
+
+  <p>Has visitado esta pagina {{ num_visits }}{% if num_visits == 1 %} vez{% else %} veces{% endif %}.</p>
+
+{% endblock %}
