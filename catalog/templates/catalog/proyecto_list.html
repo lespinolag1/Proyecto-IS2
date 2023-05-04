@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Lista de proyectos</h1>
+
+    {% if proyecto_list %}
+    <ul>
+
+      {% for proyecto in proyecto_list %}
+      <li>
+        <a href="{{ proyecto.get_absolute_url }}">{{ proyecto.nombre }}</a> (Estado: {{proyecto.estado}})
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>No hay proyectos que mostrar.</p>
+    {% endif %}
+
+    <a href="{% url 'proyecto_create' %}">Crear Proyecto</a>
+
+{% endblock %}
