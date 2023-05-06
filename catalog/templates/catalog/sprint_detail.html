@@ -1,0 +1,35 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Nombre: {{ object.nombre }}</h1>
+
+  <p><strong>ID Sprint Backlog:</strong> {{ object.idSprintBacklog }} </p>
+  <p><strong>Proyecto:</strong> {{ object.idBacklog }} </p>
+  <p><strong>Fecha Inicio:</strong> {{ object.fechaInicio }}</p>
+  <p><strong>Fecha Fin:</strong> {{ object.fechaFin }}</p>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>User Storys</h4>
+
+    {% for tareas in object.sprintbacklog_set.all %}
+    <hr>
+    <p class="{% if tareas.estado == 'i' %}text-success{% elif tareas.estado == 'c' %}text-danger{% else %}text-warning{% endif %}">{{ tareas.get_status_display }}</p>
+    {% if tareas.userstory.status != 'done' %}<p><strong>La tarea debe ser terminada en :</strong> {{tareas.userstory.fechaFin}}</p>{% endif %}
+    <p><strong>Nombre:</strong> {{tareas.userstory.nombre}}</p>
+    <p><strong>StoryPoints:</strong> {{tareas.userstory.storyPoints}}</p>
+    {% endfor %}
+  </div>
+  
+  <a href="{% url 'asignar_historia' sprint.pk %}">Agregar UserStorys</a>
+
+  <br>
+  
+  <hr>
+
+  <p>
+    <a href="{% url 'update_sprint' sprint.pk %}">Actualizar Sprint</a>
+    <br>
+    <a href="{% url 'delete_sprint' sprint.pk %}">Eliminar Sprint</a>
+  </p>
+
+{% endblock %}

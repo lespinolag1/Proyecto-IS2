@@ -25,7 +25,9 @@
           <li><a href="{% url 'index' %}">Home</a></li>
           <li><a href="{% url 'proyectos' %}">Todos los proyectos</a></li>
           <li><a href="{% url 'users' %}">Usuarios del sistema</a></li>
-          <li><a href="{% url 'user_story_list' %}"">UserStorys</a></li>
+          <li><a href="{% url 'user_story_list' %}">UserStorys</a></li>
+          <li><a href="{% url 'sprint_list' %}">Sprints</a></li>
+
 
           {% if user.is_authenticated %}
             <li>User: {{ user.get_username }}</li>

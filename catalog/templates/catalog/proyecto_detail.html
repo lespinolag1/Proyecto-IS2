@@ -18,8 +18,10 @@
     {% endif %}
   </ul>
   <a href="{% url 'agregar_usuario' proyecto.pk %}">Agregar Miembro</a>
+  <hr>
 
-  <div style="margin-left:20px;margin-top:20px">
+
+  <!--div style="margin-left:20px;margin-top:20px">
     <h4>User Storys</h4>
 
     {% for tareas in object.userstory_set.all %}
@@ -29,7 +31,7 @@
     <p><strong>Nombre:</strong> {{tareas.nombre}}</p>
     <p><strong>StoryPoints:</strong> {{tareas.storyPoints}}</p>
     {% endfor %}
-  </div>
+  </div-->
 
   <br>
   

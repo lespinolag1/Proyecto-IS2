@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 
 from django.contrib.auth.models import User
-from .models import Proyecto, Sprint, UserStory, UsuarioProyecto, Rol
+from .models import Proyecto, Sprint, UserStory, UsuarioProyecto, SprintBacklog
 from .forms import ProjectForm, UserStoryForm, SprintForm, UserForm
 
 # Create your views here.
@@ -156,6 +156,28 @@ class SprintUpdateView(LoginRequiredMixin, generic.UpdateView):
 class SprintDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Sprint
     success_url = reverse_lazy('sprint_list')
+
+
+class AsignarUserStory(LoginRequiredMixin, CreateView):
+    model = SprintBacklog
+    fields = ['userstory', 'sprint']
+    template_name = 'asignar_historia.html'
+
+    def get_success_url(self):
+        return reverse_lazy('sprint_detail', args=[self.kwargs['pk']])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        userstory = get_object_or_404(UserStory, pk=self.kwargs['pk'])
+        context['userstory'] = userstory
+        return context
+
+    def form_valid(self, form):
+        sprint = get_object_or_404(Sprint, pk=self.kwargs['pk'])
+        sprint_backlog = form.save(commit=False)
+        sprint_backlog.sprint = sprint
+        sprint_backlog.save()
+        return super().form_valid(form)
 
 
 def index(request):

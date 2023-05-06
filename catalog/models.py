@@ -80,7 +80,7 @@ class Sprint(models.Model):
         
         # Devuelve el URL a una instancia particular de Sprint
         
-        return reverse('sprint_detail', args=[str(self.nombre)])
+        return reverse('sprint_detail', args=[str(self.idSprintBacklog)])
 
 
 class UserStory(models.Model):
@@ -116,3 +116,7 @@ class UserStory(models.Model):
         
         return reverse('userstory_detail', args=[str(self.idUserStory)])
 
+
+class SprintBacklog (models.Model):
+    sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE)
+    userstory = models.ForeignKey(UserStory, on_delete=models.CASCADE)
