@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Lista de Sprints</h1>
+
+    {% if sprint_list %}
+    <ul>
+
+      {% for sprint in sprint_list %}
+      <li>
+        <a href="{{ sprint.get_absolute_url }}">{{ sprint.nombre }}</a> (Proyecto: {{sprint.idBacklog}})
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>No hay sprints que mostrar.</p>
+    {% endif %}
+
+    <a href="{% url 'create_sprint' %}">Crear Sprint</a>
+
+{% endblock %}

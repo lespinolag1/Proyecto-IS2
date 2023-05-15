@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>Eliminar Sprint</h1>
+
+<p>Deseas eliminar este sprint?: {{ sprint.nombre }}?</p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" action="" value="Yes, delete." />
+</form>
+
+{% endblock %}
