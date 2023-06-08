@@ -1,22 +1,23 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Lista de proyectos</h1>
+<div class="container">
+  <h1>Lista de proyectos</h1>
 
-    {% if proyecto_list %}
-    <ul>
+  {% if proyecto_list %}
+  <ul class="list-group">
+    {% for proyecto in proyecto_list %}
+    <li class="list-group-item">
+      <br>
+      <a href="{{ proyecto.get_absolute_url }}">{{ proyecto.nombre }}</a> (Estado: {{proyecto.estado}})
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No hay proyectos que mostrar.</p>
+  {% endif %}
 
-      {% for proyecto in proyecto_list %}
-      <li>
-        <a href="{{ proyecto.get_absolute_url }}">{{ proyecto.nombre }}</a> (Estado: {{proyecto.estado}})
-      </li>
-      {% endfor %}
-
-    </ul>
-    {% else %}
-      <p>No hay proyectos que mostrar.</p>
-    {% endif %}
-
-    <a href="{% url 'proyecto_create' %}">Crear Proyecto</a>
-
+  <a href="{% url 'proyecto_create' %}" class="btn btn-primary mt-3">Crear Proyecto</a>
+</div>
 {% endblock %}
+

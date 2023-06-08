@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import generic
+from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -8,12 +9,16 @@ from django.shortcuts import get_object_or_404
 import json
 from django.db.models import Count
 from datetime import timedelta
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, authenticate
+from django.http import HttpResponseRedirect
 
 from django.contrib.auth.models import User
 from .models import Proyecto, Sprint, UserStory, UsuarioProyecto, SprintBacklog
 from .forms import ProjectForm, UserStoryForm, SprintForm, UserForm
 
 # Create your views here.
+
 
 
 class ProjectListView(LoginRequiredMixin,  generic.ListView):

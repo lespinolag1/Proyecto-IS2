@@ -9,7 +9,7 @@
   <p><strong>Fecha Fin:</strong> {{ object.fechaFin }}</p>
 
   <div style="margin-left:20px;margin-top:20px">
-    <h4>User Storys</h4>
+    <h4>User Stories</h4>
 
     {% for tareas in object.sprintbacklog_set.all %}
     <hr>
@@ -20,7 +20,7 @@
     {% endfor %}
   </div>
   
-  <a href="{% url 'asignar_historia' sprint.pk %}">Agregar UserStorys</a>
+  <a href="{% url 'asignar_historia' sprint.pk %}">Agregar UserStories</a>
 
   <br>
   

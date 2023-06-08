@@ -4,36 +4,36 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <h2>To Do</h2>
+      <h2 class="text-primary">To Do</h2>
       <div class="card">
         <div class="card-body">
           <ul class="list-group">
             {% for user_story in todo %}
-            <li class="list-group-item">{{ user_story.nombre }}</li>
+            <li class="list-group-item list-group-item-primary">{{ user_story.nombre }}</li>
             {% endfor %}
           </ul>
         </div>
       </div>
     </div>
     <div class="col">
-      <h2>Doing</h2>
+      <h2 class="text-warning">Doing</h2>
       <div class="card">
         <div class="card-body">
           <ul class="list-group">
             {% for user_story in doing %}
-            <li class="list-group-item">{{ user_story.nombre }}</li>
+            <li class="list-group-item list-group-item-warning">{{ user_story.nombre }}</li>
             {% endfor %}
           </ul>
         </div>
       </div>
     </div>
     <div class="col">
-      <h2>Done</h2>
+      <h2 class="text-success">Done</h2>
       <div class="card">
         <div class="card-body">
           <ul class="list-group">
             {% for user_story in done %}
-            <li class="list-group-item">{{ user_story.nombre }}</li>
+            <li class="list-group-item list-group-item-success">{{ user_story.nombre }}</li>
             {% endfor %}
           </ul>
         </div>
@@ -42,4 +42,5 @@
   </div>
 </div>
 {% endblock %}
+
 
