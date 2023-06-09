@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Burndown Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="burndown-chart" width="80" height="35"></canvas>
+
+    <script>
+        // Obtener los datos del gráfico pasados desde la vista
+        var chartData = JSON.parse('{{ chart_data|escapejs }}');
+
+        // Obtener los arrays de datos del gráfico
+        var fechas = chartData.fechas;
+        var us_realizadas = chartData.us_realizadas;
+        var dias_sprint = chartData.dias_sprint;
+        var us_restantes = chartData.us_restantes;
+
+        // Crear el contexto del gráfico
+        var ctx = document.getElementById('burndown-chart').getContext('2d');
+
+        // Crear el gráfico de Burndown Chart
+        var burndownChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: fechas,
+                datasets: [
+                    {
+                        label: 'US Realizadas',
+                        data: us_realizadas,
+                        borderColor: 'green',
+                        backgroundColor: 'rgba(0, 128, 0, 0.2)',
+                        fill: true
+                    },
+                    {
+                        label: 'US Restantes',
+                        data: us_restantes,
+                        borderColor: 'red',
+                        backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Días del Sprint'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'US'
+                        },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    <style>
+      #chart-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 200px;
+      }
+  
+      #burndown-chart {
+          width: 500px;
+          height: 200px;
+      }
+  </style>
+  
+  <div id="chart-container">
+      <canvas id="burndown-chart"></canvas>
+  </div>
+</body>
+</html>

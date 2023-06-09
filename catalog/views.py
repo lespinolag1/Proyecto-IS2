@@ -1,9 +1,16 @@
 from django.shortcuts import render
 from django.views import generic
+from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
+import json
+from django.db.models import Count
+from datetime import timedelta
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 
 from django.contrib.auth.models import User
@@ -11,6 +18,7 @@ from .models import Proyecto, Sprint, UserStory, UsuarioProyecto, SprintBacklog
 from .forms import ProjectForm, UserStoryForm, SprintForm, UserForm
 
 # Create your views here.
+
 
 
 class ProjectListView(LoginRequiredMixin,  generic.ListView):
@@ -96,7 +104,7 @@ class UserDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy('users')
 
 
-class UserStoryListView(ListView):
+class UserStoryListView(LoginRequiredMixin, ListView):
     model = UserStory
     queryset = UserStory.objects.all()
 
@@ -127,7 +135,7 @@ class UserStoryDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy('user_story_list')
 
 
-class SprintListView(ListView):
+class SprintListView(LoginRequiredMixin, ListView):
     model = Sprint
     context_object_name = 'sprint_list'
 
@@ -178,6 +186,83 @@ class AsignarUserStory(LoginRequiredMixin, CreateView):
         sprint_backlog.sprint = sprint
         sprint_backlog.save()
         return super().form_valid(form)
+
+
+@login_required
+def kanban_board(request):
+    # Obtener todos los user stories
+    user_stories = UserStory.objects.exclude(estado='Cancelled')
+
+    # Filtrar user stories por estado
+    todo = user_stories.filter(estado='To do')
+    doing = user_stories.filter(estado='Doing')
+    done = user_stories.filter(estado='Done')
+
+    context = {
+        'todo': todo,
+        'doing': doing,
+        'done': done
+    }
+
+    return render(request, 'kanban_board.html', context)
+
+
+@login_required
+def burndown_chart(request):
+    # Obtener los parámetros del proyecto/sprint para filtrar
+    proyecto_id = request.GET.get('proyecto_id')
+    sprint_id = request.GET.get('sprint_id')
+
+    # Filtrar los User Stories realizados (estado 'Done') para el proyecto/sprint especificado
+    user_stories = UserStory.objects.filter(estado='Done',
+                                            proyecto_id=proyecto_id,
+                                            sprintbacklog__sprint_id=sprint_id)
+
+    # Ordenar los User Stories por fecha de finalización
+    user_stories = user_stories.order_by('fechaFin')
+
+    # Obtener la fecha de inicio y fin del sprint
+    sprint = Sprint.objects.get(idSprintBacklog=sprint_id)
+    fecha_inicio = sprint.fechaInicio
+    fecha_fin = sprint.fechaFin
+
+    # Calcular la duración total del sprint en días
+    duracion_sprint = (fecha_fin - fecha_inicio).days + 1
+
+    # Obtener la cantidad de User Stories realizados por día
+    user_stories_realizados = user_stories.filter(fechaFin__gte=fecha_inicio).values('fechaFin').annotate(total=Count('idUserStory'))
+
+    # Crear listas para almacenar los datos del Burndown Chart
+    fechas = []
+    us_realizadas = []
+    dias_sprint = []
+    us_restantes = []
+
+    # Calcular los valores para el Burndown Chart
+    fecha_actual = fecha_inicio
+    user_stories_restantes = user_stories.count()
+    for _ in range(duracion_sprint):
+        fechas.append(fecha_actual.strftime('%Y-%m-%d'))
+        us_realizadas_dia = sum([item['total'] for item in user_stories_realizados if item['fechaFin'] == fecha_actual])
+        us_realizadas.append(us_realizadas_dia)
+        dias_sprint.append((fecha_actual - fecha_inicio).days + 1)
+        us_restantes.append(user_stories_restantes)
+        user_stories_restantes -= us_realizadas_dia
+        fecha_actual += timedelta(days=1)
+
+    # Crear un diccionario con los datos del Burndown Chart
+    data = {
+        'fechas': fechas,
+        'us_realizadas': us_realizadas,
+        'dias_sprint': dias_sprint,
+        'us_restantes': us_restantes,
+    }
+
+    # Convertir el diccionario a una cadena JSON
+    json_data = json.dumps(data)
+
+    # Renderizar el template del Burndown Chart y pasar los datos JSON al contexto
+    return render(request, 'burndown_chart.html', {'chart_data': json_data})
 
 
 def index(request):
