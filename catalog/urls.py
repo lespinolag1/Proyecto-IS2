@@ -26,5 +26,7 @@ urlpatterns = [
     url(r'^sprint/(?P<pk>[-\w]+)/update/$', views.SprintUpdateView.as_view(), name='update_sprint'),
     url(r'^sprint/(?P<pk>[-\w]+)/delete/$', views.SprintDeleteView.as_view(), name='delete_sprint'),
     url(r'^sprint/(?P<pk>[-\w]+)/asignar_historia/$', views.AsignarUserStory.as_view(), name='asignar_historia'),
+    url(r'kanban/', views.kanban_board, name='kanban_board'),
+    url(r'burndown-chart/', views.burndown_chart, name='burndown_chart'),
 
 ]

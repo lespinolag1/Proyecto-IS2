@@ -1,22 +1,54 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Lista de usuarios del sistema</h1>
+    <div class="container">
+        <h1>Lista de usuarios del sistema</h1>
+        <br>
+        {% if user_list %}
+        <ul class="user-list">
+            {% for user in user_list %}
+            <li class="user-item">
+                <div class="user-info">
+                    <a href="{% url 'user_detail' user.pk %}" class="user-name">{{ user.username }}</a>
+                    <span class="user-details">({{ user.email }} - ID: {{ user.id }})</span>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No hay usuarios que mostrar.</p>
+        {% endif %}
 
-    {% if user_list %}
-    <ul>
+        <a href="{% url 'user_create' %}" class="btn btn-primary mt-3">Crear Usuario</a>
+    </div>
 
-      {% for user in user_list %}
-      <li>
-        <a href="{% url 'user_detail' user.pk %}">{{ user.username }}</a> ({{user.email}} - ID: {{user.id}})
-      </li>
-      {% endfor %}
+    <style>
+        .container {
+            margin-top: 20px;
+        }
 
-    </ul>
-    {% else %}
-      <p>No hay usuarios que mostrar.</p>
-    {% endif %}
+        .user-list {
+            list-style: none;
+            padding: 0;
+        }
 
-    <a href="{% url 'user_create' %}">Crear Usuario</a>
+        .user-item {
+            margin-bottom: 10px;
+        }
 
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-name {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .user-details {
+            color: #888;
+        }
+    </style>
 {% endblock %}
+

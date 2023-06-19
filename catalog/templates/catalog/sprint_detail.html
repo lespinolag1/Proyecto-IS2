@@ -1,35 +1,76 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Nombre: {{ object.nombre }}</h1>
+  <div class="container">
+    <h1>Nombre: {{ object.nombre }}</h1>
 
-  <p><strong>ID Sprint Backlog:</strong> {{ object.idSprintBacklog }} </p>
-  <p><strong>Proyecto:</strong> {{ object.idBacklog }} </p>
-  <p><strong>Fecha Inicio:</strong> {{ object.fechaInicio }}</p>
-  <p><strong>Fecha Fin:</strong> {{ object.fechaFin }}</p>
+    <div class="sprint-details">
+      <p><strong>ID Sprint Backlog:</strong> {{ object.idSprintBacklog }}</p>
+      <p><strong>Proyecto:</strong> {{ object.idBacklog }}</p>
+      <p><strong>Fecha de inicio:</strong> {{ object.fechaInicio }}</p>
+      <p><strong>Fecha de fin:</strong> {{ object.fechaFin }}</p>
+    </div>
 
-  <div style="margin-left:20px;margin-top:20px">
-    <h4>User Storys</h4>
+    <div class="user-stories">
+      <h4>User Stories</h4>
 
-    {% for tareas in object.sprintbacklog_set.all %}
+      {% for tarea in object.sprintbacklog_set.all %}
+        <hr>
+        <p class="{% if tarea.estado == 'i' %}text-success{% elif tarea.estado == 'c' %}text-danger{% else %}text-warning{% endif %}">
+          {{ tarea.get_status_display }}</p>
+        {% if tarea.userstory.status != 'done' %}
+          <p><strong>La tarea debe ser terminada en:</strong> {{ tarea.userstory.fechaFin }}</p>
+        {% endif %}
+        <p><strong>Nombre:</strong> {{ tarea.userstory.nombre }}</p>
+        <p><strong>Story Points:</strong> {{ tarea.userstory.storyPoints }}</p>
+      {% endfor %}
+    </div>
+
+    <a href="{% url 'asignar_historia' object.idSprintBacklog %}" class="btn btn-primary mt-3">Agregar User Stories</a>
     <hr>
-    <p class="{% if tareas.estado == 'i' %}text-success{% elif tareas.estado == 'c' %}text-danger{% else %}text-warning{% endif %}">{{ tareas.get_status_display }}</p>
-    {% if tareas.userstory.status != 'done' %}<p><strong>La tarea debe ser terminada en :</strong> {{tareas.userstory.fechaFin}}</p>{% endif %}
-    <p><strong>Nombre:</strong> {{tareas.userstory.nombre}}</p>
-    <p><strong>StoryPoints:</strong> {{tareas.userstory.storyPoints}}</p>
-    {% endfor %}
+
+    <div class="sprint-actions">
+      <a href="{% url 'update_sprint' sprint.pk %}" class="btn btn-secondary">Actualizar Sprint</a>
+      <a href="{% url 'delete_sprint' sprint.pk %}" class="btn btn-danger">Eliminar Sprint</a>
+      <a href="{% url 'burndown_chart' %}?proyecto_id={{ sprint.idBacklog.idBacklog }}&sprint_id={{ sprint.pk }}" class="btn btn-info">Ver Burndown Chart</a>
+    </div>
   </div>
-  
-  <a href="{% url 'asignar_historia' sprint.pk %}">Agregar UserStorys</a>
 
-  <br>
-  
-  <hr>
+  <style>
+    .container {
+      margin-top: 20px;
+    }
 
-  <p>
-    <a href="{% url 'update_sprint' sprint.pk %}">Actualizar Sprint</a>
-    <br>
-    <a href="{% url 'delete_sprint' sprint.pk %}">Eliminar Sprint</a>
-  </p>
+    .sprint-details {
+      margin-bottom: 20px;
+    }
 
+    .user-stories hr {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      border: none;
+      border-top: 1px solid #ddd;
+    }
+
+    .user-stories p {
+      margin-bottom: 10px;
+    }
+
+    .text-success {
+      color: green;
+    }
+
+    .text-danger {
+      color: red;
+    }
+
+    .text-warning {
+      color: orange;
+    }
+
+    .sprint-actions {
+      margin-top: 20px;
+    }
+  </style>
 {% endblock %}
+

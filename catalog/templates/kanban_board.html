@@ -1,0 +1,52 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="mt-5">
+        <h2 class="mb-3">To Do</h2>
+        <div class="card bg-info text-white">
+          <div class="card-body">
+            <ul class="list-group">
+              {% for user_story in todo %}
+              <li class="list-group-item">{{ user_story.idUserStory }} - {{ user_story.nombre }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="mt-5">
+        <h2 class="mb-3">Doing</h2>
+        <div class="card bg-light">
+          <div class="card-body">
+            <ul class="list-group">
+              {% for user_story in doing %}
+              <li class="list-group-item">{{ user_story.idUserStory }} - {{ user_story.nombre }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="mt-5">
+        <h2 class="mb-3">Done</h2>
+        <div class="card bg-success text-white">
+          <div class="card-body">
+            <ul class="list-group">
+              {% for user_story in done %}
+              <li class="list-group-item">{{ user_story.idUserStory }} - {{ user_story.nombre }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

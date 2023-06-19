@@ -1,22 +1,54 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Lista de User Storys</h1>
+    <div class="container">
+        <h1>Lista de User Stories</h1>
 
-    {% if userstory_list %}
-    <ul>
+        {% if userstory_list %}
+        <ul class="userstory-list">
+            {% for userstory in userstory_list %}
+            <li class="userstory-item">
+                <div class="userstory-info">
+                    <a href="{{ userstory.get_absolute_url }}" class="userstory-name">{{ userstory.nombre }}</a>
+                    <span class="userstory-project">Proyecto: {{ userstory.proyecto }}</span>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No hay historias que mostrar.</p>
+        {% endif %}
 
-      {% for userstory in userstory_list %}
-      <li>
-        <a href="{{ userstory.get_absolute_url }}">{{ userstory.nombre }}</a> (Proyecto: {{userstory.proyecto}})
-      </li>
-      {% endfor %}
+        <a href="{% url 'create_story' %}" class="btn btn-primary mt-3">Crear User Story</a>
+    </div>
 
-    </ul>
-    {% else %}
-      <p>No hay historias que mostrar.</p>
-    {% endif %}
+    <style>
+        .container {
+            margin-top: 20px;
+        }
 
-    <a href="{% url 'create_story' %}">Crear User Story</a>
+        .userstory-list {
+            list-style: none;
+            padding: 0;
+        }
 
+        .userstory-item {
+            margin-bottom: 10px;
+        }
+
+        .userstory-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .userstory-name {
+            margin-right: 10px;
+        }
+
+        .userstory-project {
+            font-weight: bold;
+            color: #888;
+        }
+    </style>
 {% endblock %}
+
