@@ -3,13 +3,15 @@
 {% block content %}
 <div class="container">
   <h1>Lista de proyectos</h1>
-
+  <br>
   {% if proyecto_list %}
   <ul class="list-group">
     {% for proyecto in proyecto_list %}
     <li class="list-group-item">
-      <br>
-      <a href="{{ proyecto.get_absolute_url }}">{{ proyecto.nombre }}</a> (Estado: {{proyecto.estado}})
+      <div class="project-info">
+        <a href="{{ proyecto.get_absolute_url }}" class="project-name">{{ proyecto.nombre }}</a>
+        <span class="project-status">Estado: {{ proyecto.estado }}</span>
+      </div>
     </li>
     {% endfor %}
   </ul>
@@ -19,5 +21,26 @@
 
   <a href="{% url 'proyecto_create' %}" class="btn btn-primary mt-3">Crear Proyecto</a>
 </div>
+
+<style>
+  .container {
+    margin-top: 20px;
+  }
+
+  .project-info {
+    display: flex;
+    align-items: center;
+  }
+
+  .project-name {
+    margin-right: 10px;
+  }
+
+  .project-status {
+    font-weight: bold;
+    color: #888;
+  }
+</style>
 {% endblock %}
+
 

@@ -1,22 +1,55 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Lista de Sprints</h1>
+    <div class="container">
+        <h1>Lista de Sprints</h1>
 
-    {% if sprint_list %}
-    <ul>
+        {% if sprint_list %}
+        <ul class="sprint-list">
+            {% for sprint in sprint_list %}
+            <br>
+            <li class="sprint-item">
+                <div class="sprint-info">
+                    <a href="{{ sprint.get_absolute_url }}" class="sprint-name">{{ sprint.nombre }}</a>
+                    <span class="sprint-project">Proyecto: {{ sprint.idBacklog }}</span>
+                </div>
+            </li>
+            <br>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No hay sprints que mostrar.</p>
+        {% endif %}
 
-      {% for sprint in sprint_list %}
-      <li>
-        <a href="{{ sprint.get_absolute_url }}">{{ sprint.nombre }}</a> (Proyecto: {{sprint.idBacklog}})
-      </li>
-      {% endfor %}
+        <a href="{% url 'create_sprint' %}" class="btn btn-primary mt-3">Crear Sprint</a>
+    </div>
 
-    </ul>
-    {% else %}
-      <p>No hay sprints que mostrar.</p>
-    {% endif %}
+    <style>
+        .container {
+            margin-top: 20px;
+        }
 
-    <a href="{% url 'create_sprint' %}">Crear Sprint</a>
+        .sprint-list {
+            list-style: none;
+            padding: 0;
+        }
 
+        .sprint-item {
+            margin-bottom: 10px;
+        }
+
+        .sprint-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .sprint-name {
+            margin-right: 10px;
+        }
+
+        .sprint-project {
+            font-weight: bold;
+            color: #888;
+        }
+    </style>
 {% endblock %}

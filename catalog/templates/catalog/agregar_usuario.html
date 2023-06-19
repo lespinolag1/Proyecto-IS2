@@ -1,10 +1,23 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Agregar usuario al proyecto "{{ proyecto.nombre }}"</h1>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Agregar</button>
-  </form>
+  <div class="container">
+    <h1>Agregar usuario al proyecto "{{ proyecto.nombre }}"</h1>
+    <form method="post" class="user-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Agregar</button>
+    </form>
+  </div>
+
+  <style>
+    .container {
+      margin-top: 20px;
+    }
+
+    .user-form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  </style>
 {% endblock %}

@@ -3,9 +3,38 @@
 <head>
     <title>Burndown Chart</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        canvas#burndown-chart {
+            width: 800px;
+            height: 400px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
-    <canvas id="burndown-chart" width="80" height="35"></canvas>
+    <h3>Burndown Chart</h3>
+
+    <div id="chart-container">
+        <canvas id="burndown-chart"></canvas>
+    </div>
 
     <script>
         // Obtener los datos del gráfico pasados desde la vista
@@ -62,22 +91,6 @@
             }
         });
     </script>
-    <style>
-      #chart-container {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 200px;
-      }
-  
-      #burndown-chart {
-          width: 500px;
-          height: 200px;
-      }
-  </style>
-  
-  <div id="chart-container">
-      <canvas id="burndown-chart"></canvas>
-  </div>
 </body>
 </html>
+

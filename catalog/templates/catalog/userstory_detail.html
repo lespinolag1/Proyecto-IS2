@@ -1,24 +1,39 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>{{ object.idUserStory }} - {{ object.nombre }}</h1>
+  <div class="container">
+    <h1>{{ object.idUserStory }} - {{ object.nombre }}</h1>
 
-  <p><strong>Descripcion:</strong> {{ object.descripcion }} </p>
-  <p><strong>Proyecto:</strong> {{ object.proyecto }} </p>
-  <p><strong>StoryPoints:</strong> {{ object.storyPoints }} </p>
-  <p><strong>Descripcion de hecho:</strong> {{ object.hecho }} </p>
-  <p><strong>Prioridad:</strong> {{ object.prioridad }} </p>
-  <p><strong>Estado:</strong> {{ object.estado }} </p>
-  <p><strong>Usuario:</strong> {{ object.usuario }} </p>
-  <p><strong>Fecha Inicio:</strong> {{ object.fechaInicio }}</p>
-  <p><strong>Fecha Fin:</strong> {{ object.fechaFin }}</p>
+    <div class="user-story-details">
+      <p><strong>Descripción:</strong> {{ object.descripcion }}</p>
+      <p><strong>Proyecto:</strong> {{ object.proyecto }}</p>
+      <p><strong>Story Points:</strong> {{ object.storyPoints }}</p>
+      <p><strong>Descripción de hecho:</strong> {{ object.hecho }}</p>
+      <p><strong>Prioridad:</strong> {{ object.prioridad }}</p>
+      <p><strong>Estado:</strong> {{ object.estado }}</p>
+      <p><strong>Usuario:</strong> {{ object.usuario }}</p>
+      <p><strong>Fecha de inicio:</strong> {{ object.fechaInicio }}</p>
+      <p><strong>Fecha de fin:</strong> {{ object.fechaFin }}</p>
+    </div>
 
-  <br>
-  
-  <p>
-    <a href="{% url 'update_story' userstory.pk %}">Actualizar User Story</a>
-    <br>
-    <a href="{% url 'delete_story' userstory.pk %}">Eliminar UserStory</a>
-  </p>
+    <div class="user-story-actions">
+      <a href="{% url 'update_story' userstory.pk %}" class="btn btn-secondary">Actualizar User Story</a>
+      <a href="{% url 'delete_story' userstory.pk %}" class="btn btn-danger">Eliminar User Story</a>
+    </div>
+  </div>
 
+  <style>
+    .container {
+      margin-top: 20px;
+    }
+
+    .user-story-details {
+      margin-bottom: 20px;
+    }
+
+    .user-story-actions {
+      margin-top: 20px;
+    }
+  </style>
 {% endblock %}
+
