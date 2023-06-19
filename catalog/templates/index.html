@@ -1,19 +1,25 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<h1>GesPoli Home</h1>
+<div class="container">
+  <h1>GesPoli Home</h1>
 
-  <p>Welcome to <em>GesPoli</em>, a very basic Django website.</p>
+  <div class="card mt-4">
+    <div class="card-body">
+      <h5 class="card-title">Algunos datos del sistema:</h5>
+      <ul class="list-group">
+        <li class="list-group-item"><strong>Proyectos:</strong> {{ num_proyectos }}</li>
+        <li class="list-group-item"><strong>Tareas:</strong> {{ num_storys }}</li>
+        <li class="list-group-item"><strong>Número de proyectos iniciados:</strong> {{ num_proyectos_iniciados }}</li>
+      </ul>
+    </div>
+  </div>
 
-<h2>Dynamic content</h2>
-
-  <p>Algunos datos del sistema: </p>
-  <ul>
-    <li><strong>Proyectos:</strong> {{ num_proyectos }}</li>
-    <li><strong>Tareas:</strong> {{ num_storys }}</li>
-    <li><strong>Numero de proyectos iniciados:</strong> {{ num_proyectos_iniciados }}</li>
-  </ul>
-
-  <p>Has visitado esta pagina {{ num_visits }}{% if num_visits == 1 %} vez{% else %} veces{% endif %}.</p>
-
+  <div class="card mt-4">
+    <div class="card-body">
+      <h5 class="card-title">Visitas a esta página:</h5>
+      <p class="card-text">Has visitado esta página {{ num_visits }}{% if num_visits == 1 %} vez{% else %} veces{% endif %}.</p>
+    </div>
+  </div>
+</div>
 {% endblock %}

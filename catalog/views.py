@@ -12,13 +12,15 @@ from datetime import timedelta
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
+from django.db.models import Q
+from django.views.generic.edit import FormView
+
 
 from django.contrib.auth.models import User
 from .models import Proyecto, Sprint, UserStory, UsuarioProyecto, SprintBacklog
-from .forms import ProjectForm, UserStoryForm, SprintForm, UserForm
+from .forms import ProjectForm, UserStoryForm, SprintForm, UserForm, AsignarUserStoryForm
 
 # Create your views here.
-
 
 
 class ProjectListView(LoginRequiredMixin,  generic.ListView):
@@ -88,9 +90,15 @@ class UserDetailView(LoginRequiredMixin, generic.DetailView):
 
 class UserCreateView(LoginRequiredMixin, CreateView):
     model = User
-    user_form = UserForm()
     fields = ['username', 'email', 'password', 'first_name', 'last_name']
     success_url = reverse_lazy('users')
+
+    def form_valid(self, form):
+        # Antes de guardar el formulario, procesamos la contraseña
+        user = form.save(commit=False)
+        user.set_password(form.cleaned_data['password'])
+        user.save()
+        return super().form_valid(form)
 
 
 class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -166,9 +174,8 @@ class SprintDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy('sprint_list')
 
 
-class AsignarUserStory(LoginRequiredMixin, CreateView):
-    model = SprintBacklog
-    fields = ['userstory', 'sprint']
+class AsignarUserStory(FormView):
+    form_class = AsignarUserStoryForm
     template_name = 'asignar_historia.html'
 
     def get_success_url(self):
@@ -176,15 +183,31 @@ class AsignarUserStory(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        userstory = get_object_or_404(UserStory, pk=self.kwargs['pk'])
-        context['userstory'] = userstory
+        sprint = get_object_or_404(Sprint, pk=self.kwargs['pk'])
+        context['sprint'] = sprint
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        sprint = get_object_or_404(Sprint, pk=self.kwargs['pk'])
+        kwargs['sprint'] = sprint
+        return kwargs
 
     def form_valid(self, form):
         sprint = get_object_or_404(Sprint, pk=self.kwargs['pk'])
-        sprint_backlog = form.save(commit=False)
-        sprint_backlog.sprint = sprint
-        sprint_backlog.save()
+        userstory = form.cleaned_data['userstory']
+
+        # Verificar si el User Story ya está asignado a otro Sprint
+        try:
+            sprintbacklog = SprintBacklog.objects.get(userstory=userstory)
+            # Eliminar la asignación anterior del User Story
+            sprintbacklog.delete()
+        except SprintBacklog.DoesNotExist:
+            pass
+
+        # Crear un nuevo SprintBacklog para asignar el User Story al Sprint actual
+        SprintBacklog.objects.create(sprint=sprint, userstory=userstory)
+
         return super().form_valid(form)
 
 

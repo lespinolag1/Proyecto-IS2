@@ -1,7 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
-from .models import Proyecto, UserStory, Sprint
+from .models import Proyecto, UserStory, Sprint, SprintBacklog
+from django.db.models import Q
 
 
 class ProjectForm(forms.ModelForm):
@@ -41,6 +42,17 @@ class UserStoryForm(forms.ModelForm):
         if points <= 0:
             raise forms.ValidationError("Los puntos de historia deben ser mayor que cero.")
         return points
+
+
+class AsignarUserStoryForm(forms.ModelForm):
+    class Meta:
+        model = SprintBacklog
+        fields = ['userstory']
+
+    def __init__(self, *args, **kwargs):
+        sprint = kwargs.pop('sprint')  # Obtener el argumento 'sprint'
+        super().__init__(*args, **kwargs)
+        self.fields['userstory'].queryset = UserStory.objects.filter(sprintbacklog__isnull=True) | UserStory.objects.filter(sprintbacklog__sprint=sprint)
 
 
 class SprintForm(forms.ModelForm):

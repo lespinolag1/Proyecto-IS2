@@ -1,44 +1,64 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Nombre: {{ object.nombre }}</h1>
+  <div class="container">
+    <h1>Nombre: {{ object.nombre }}</h1>
 
-  <p><strong>Descripcion:</strong> {{ object.descripcion }} </p>
-  <p><strong>Fecha Inicio:</strong> {{ object.fechaInicio }}</p>
-  <p><strong>Fecha Fin:</strong> {{ object.fechaFin }}</p>
-  <p><strong>Estado:</strong> {{ object.estado }}</p>
-  <h2>Usuarios del proyecto</h2>
-  <ul>
+    <div class="project-details">
+      <p><strong>Descripción:</strong> {{ object.descripcion }}</p>
+      <p><strong>Fecha de inicio:</strong> {{ object.fechaInicio }}</p>
+      <p><strong>Fecha de fin:</strong> {{ object.fechaFin }}</p>
+      <p><strong>Estado:</strong> {{ object.estado }}</p>
+    </div>
+
+    <h2>Usuarios del proyecto</h2>
     {% if usuarios_proyecto %}
-      {% for usuario_proyecto in usuarios_proyecto %}
-        <li>{{ usuario_proyecto.user.username }}: {{usuario_proyecto.rol.rol }}</li> 
-      {% endfor %}
+      <ul class="user-list">
+        {% for usuario_proyecto in usuarios_proyecto %}
+          <li class="user-item">
+            <span class="username">{{ usuario_proyecto.user.username }}</span>: {{ usuario_proyecto.rol.rol }}
+          </li>
+        {% endfor %}
+      </ul>
     {% else %}
       <p>No hay usuarios que mostrar.</p>
     {% endif %}
-  </ul>
-  <a href="{% url 'agregar_usuario' proyecto.pk %}">Agregar Miembro</a>
-  <hr>
 
-
-  <!--div style="margin-left:20px;margin-top:20px">
-    <h4>User Storys</h4>
-
-    {% for tareas in object.userstory_set.all %}
+    <a href="{% url 'agregar_usuario' proyecto.pk %}" class="btn btn-primary mt-3">Agregar Miembro</a>
     <hr>
-    <p class="{% if tareas.estado == 'i' %}text-success{% elif tareas.estado == 'c' %}text-danger{% else %}text-warning{% endif %}">{{ tareas.get_status_display }}</p>
-    {% if tareas.status != 'finalizado' %}<p><strong>La tarea debe ser terminada en :</strong> {{tareas.fechaFin}}</p>{% endif %}
-    <p><strong>Nombre:</strong> {{tareas.nombre}}</p>
-    <p><strong>StoryPoints:</strong> {{tareas.storyPoints}}</p>
-    {% endfor %}
-  </div-->
 
-  <br>
-  
-  <p>
-    <a href="{% url 'update_proyecto' proyecto.pk %}">Actualizar Proyecto</a>
-    <br>
-    <a href="{% url 'delete_proyecto' proyecto.pk %}">Eliminar Proyecto</a>
-  </p>
+    <div class="project-actions">
+      <a href="{% url 'update_proyecto' proyecto.pk %}" class="btn btn-secondary">Actualizar Proyecto</a>
+      <a href="{% url 'delete_proyecto' proyecto.pk %}" class="btn btn-danger">Eliminar Proyecto</a>
+    </div>
+  </div>
 
+  <style>
+    .container {
+      margin-top: 20px;
+    }
+
+    .project-details {
+      margin-bottom: 20px;
+    }
+
+    .user-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .user-item {
+      margin-bottom: 10px;
+    }
+
+    .username {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .project-actions {
+      margin-top: 20px;
+    }
+  </style>
 {% endblock %}
+
